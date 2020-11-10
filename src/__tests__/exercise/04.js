@@ -15,16 +15,14 @@ const buildLoginForm = (defaults = {}) => ({
 
 test('submitting the form calls onSubmit with username and password', () => {
   const {username, password} = buildLoginForm()
+  const handleSubmit = jest.fn()
 
-  const handleSubmit = jest.fn(data => data)
   render(<Login onSubmit={handleSubmit} />)
 
-  const usernameInput = screen.getByLabelText(/username/i)
-  const passwordInput = screen.getByLabelText(/password/i)
-  userEvent.type(usernameInput, username)
-  userEvent.type(passwordInput, password)
-  const submit = screen.getByRole('button', {name: 'Submit'})
-  userEvent.click(submit)
+  userEvent.type(screen.getByLabelText(/username/i), username)
+  userEvent.type(screen.getByLabelText(/password/i), password)
+
+  userEvent.click(screen.getByRole('button', {name: 'Submit'}))
 
   expect(handleSubmit).toHaveBeenCalledWith({password, username})
 })
